@@ -47,7 +47,6 @@ class Tests extends \XoopsObject
     /**
      * Constructor
      *
-     * @param null
      */
     public function __construct()
     {
@@ -56,6 +55,7 @@ class Tests extends \XoopsObject
         $this->initVar('module', \XOBJ_DTYPE_TXTBOX);
         $this->initVar('area', \XOBJ_DTYPE_INT);
         $this->initVar('type', \XOBJ_DTYPE_INT);
+        $this->initVar('tplsource', \XOBJ_DTYPE_TXTBOX);
         $this->initVar('resultcode', \XOBJ_DTYPE_INT);
         $this->initVar('resulttext', \XOBJ_DTYPE_TXTBOX);
         $this->initVar('fatalerrors', \XOBJ_DTYPE_INT);
@@ -70,7 +70,6 @@ class Tests extends \XoopsObject
     /**
      * @static function &getInstance
      *
-     * @param null
      */
     public static function getInstance()
     {
@@ -86,8 +85,7 @@ class Tests extends \XoopsObject
      */
     public function getNewInsertedIdTests()
     {
-        $newInsertedId = $GLOBALS['xoopsDB']->getInsertId();
-        return $newInsertedId;
+        return $GLOBALS['xoopsDB']->getInsertId();
     }
 
     /**
@@ -152,6 +150,10 @@ class Tests extends \XoopsObject
         // Form Editor TextArea testInfotext
         if (!$isNew) {
             $form->addElement(new \XoopsFormTextArea(\_AM_WGTESTUI_TEST_INFOTEXT, 'infotext', $this->getVar('infotext', 'e'), 4, 47));
+        }
+        // Form Text tplsource
+        if (!$isNew) {
+            $form->addElement(new \XoopsFormText(\_AM_WGTESTUI_TEST_TPLSOURCE, 'tplsource', 50, 255, $this->getVar('tplsource')));
         }
         // Form Text Date Select testDatetest
         if (!$isNew) {

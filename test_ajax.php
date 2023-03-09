@@ -61,6 +61,7 @@ if (!is_object($testsObj)) {
         $testsObj->setVar('resultcode', '0');
         $testsObj->setVar('resulttext', '');
         $testsObj->setVar('infotext', '');
+        $testsObj->setVar('tplsource', '');
         //$testsObj->setVar('datetest', \time());
         $testsObj->setVar('datecreated', \time());
         $testsObj->setVar('submitter', $GLOBALS['xoopsUser']->uid());
@@ -70,8 +71,14 @@ if (!is_object($testsObj)) {
             header('Content-Type: application/json');
             echo json_encode(['status' => 'success', 'message' => \_AM_WGTESTUI_TEST_URL_ADDED]);
         } else {
+            $errorsText = '';
+            if (!empty($testsObj->getErrors())) {
+                foreach ($testsObj->getErrors() as $error) {
+                    $errorsText .= $error . '<br>';
+                }
+            }
             header('Content-Type: application/json');
-            echo json_encode(['status' => 'error', 'message' => \_AM_WGTESTUI_TEST_URL_ERROR . '<br>' . $testsObj->getErrors()]);
+            echo json_encode(['status' => 'error', 'message' => \_AM_WGTESTUI_TEST_URL_ERROR . '<br>' . $errorsText]);
         }
     }
 }
