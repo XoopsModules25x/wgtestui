@@ -138,12 +138,14 @@ class TestsHandler extends \XoopsPersistableObjectHandler
         $patternsErrorDesc = $options['patterns_fatalerrordesc'];
 
         if (empty($url)) {
-            throw new Exception('URL is empty');
+            throw new \Exception('URL is empty');
         }
-
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        if (!function_exists('curl_version')) {
+            throw new \Exception('cURL is not installed or not working properly');
+        }
+        $ch = \curl_init($url);
+        \curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        \curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         if (isset($options['timeout'])) {
             $timeout = (int) $options['timeout'];
             curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
@@ -350,6 +352,11 @@ class TestsHandler extends \XoopsPersistableObjectHandler
         foreach ($dom->getElementsByTagName('img') as $i => $img) {
             $src =  $img->getAttribute('src');
             if ('' !== $src) {
+                $headers = @get_headers($src);
+                if ($headers && strpos($headers[0], '200') !== false) {
+                    break;
+                }
+
                 if (\substr($src, 0, strlen(XOOPS_URL)) === XOOPS_URL) {
                     //src contains full path to image
                     //replace url by root
